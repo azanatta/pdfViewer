@@ -6,23 +6,25 @@
 private class PDFViewerControllerTest {
     @IsTest
     static void testRelatedFilesOfLead() {
-        Lead l = ObjectFactory.createLead();
-        insert l;
+        Lead lead = new Lead(
+            LastName = 'Test Lead'    
+        );
+        insert lead;
 
-        String fileTitle = SharedFunctions.generateRandomString(8);
+        String fileTitle = 'Test File Title';
 
         ContentVersion cVersion = new ContentVersion(
                 ContentLocation = 'S',
-                PathOnClient = SharedFunctions.generateRandomString(5)+'.pdf',
+                PathOnClient = 'testFileName.pdf',
                 Title = fileTitle,
-                VersionData = EncodingUtil.base64Decode('test body')
+                VersionData = EncodingUtil.base64Decode('test file body')
         );
         insert cVersion;
         Id contentDocumentId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:cVersion.Id].ContentDocumentId;
 
         ContentDocumentLink cDocLink = new ContentDocumentLink(
                 ContentDocumentId = contentDocumentId,
-                LinkedEntityId = l.Id,
+                LinkedEntityId = lead.Id,
                 ShareType = 'V',
                 Visibility = 'AllUsers'
         );
